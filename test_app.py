@@ -15,6 +15,7 @@ p = "postgres"
 l = "localhost:5432"
 dbp = "{}://{}:{}@{}/{}"
 
+
 class CapstoneCastingTestCase(unittest.TestCase):
     def setUp(self):
         # Define test variables and initialize app.
@@ -141,7 +142,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_post_new_actor(self):
         # Test for the successful creation of a new actor.
-        res = self.client().post('/actors', headers=self.executive_header, json=self.new_actor)
+        res = self.client().post(
+            '/actors', headers=self.executive_header, json=self.new_actor
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -150,7 +153,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_post_new_actor_422_fail(self):
         # bad request.
-        res = self.client().post('/actors', headers=self.executive_header, json={})
+        res = self.client().post(
+            '/actors', headers=self.executive_header, json={}
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -159,7 +164,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_post_new_actor_401_fail(self):
         # unauthorized, permission not granted
-        res = self.client().post('/actors', headers=self.bad_header, json=self.new_actor)
+        res = self.client().post(
+            '/actors', headers=self.bad_header, json=self.new_actor
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -168,7 +175,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_post_new_movie(self):
         # Test for the successful creation of a new movie.
-        res = self.client().post('/movies', headers=self.executive_header, json=self.new_movie)
+        res = self.client().post(
+            '/movies', headers=self.executive_header, json=self.new_movie
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -177,7 +186,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_post_new_movie_422_fail(self):
         # bad request.
-        res = self.client().post('/movies', headers=self.executive_header, json={})
+        res = self.client().post(
+            '/movies', headers=self.executive_header, json={}
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 422)
@@ -186,7 +197,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_post_new_movie_401_fail(self):
         # unauthorized, permission not granted
-        res = self.client().post('/movies', headers=self.bad_header, json=self.new_movie)
+        res = self.client().post(
+            '/movies', headers=self.bad_header, json=self.new_movie
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -195,7 +208,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_patch_actor(self):
         # Test for the successful update of an existing actor.
-        res = self.client().patch('/actors/3', headers=self.executive_header, json=self.updated_actor)
+        res = self.client().patch(
+            '/actors/3', headers=self.executive_header, json=self.updated_actor
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -204,7 +219,10 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_patch_actor_404_fail(self):
         # bad endpoint, not found
-        res = self.client().patch('/actors/500', headers=self.executive_header, json=self.updated_actor)
+        res = self.client().patch(
+            '/actors/500', headers=self.executive_header,
+            json=self.updated_actor
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -213,7 +231,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_patch_actor_401_fail(self):
         # unauthorized, permission not granted
-        res = self.client().patch('/actors/3', headers=self.bad_header, json=self.updated_actor)
+        res = self.client().patch(
+            '/actors/3', headers=self.bad_header, json=self.updated_actor
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -222,7 +242,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_patch_movie(self):
         # Test for the successful update of an existing movie.
-        res = self.client().patch('/movies/3', headers=self.executive_header, json=self.updated_movie)
+        res = self.client().patch(
+            '/movies/3', headers=self.executive_header, json=self.updated_movie
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -231,7 +253,10 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_patch_movie_404_fail(self):
         # bad endpoint, not found
-        res = self.client().patch('/movies/500', headers=self.executive_header, json=self.updated_movie)
+        res = self.client().patch(
+            '/movies/500', headers=self.executive_header,
+            json=self.updated_movie
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -240,7 +265,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_patch_movie_401_fail(self):
         # unauthorized, permission not granted
-        res = self.client().patch('/movies/3', headers=self.bad_header, json=self.updated_movie)
+        res = self.client().patch(
+            '/movies/3', headers=self.bad_header, json=self.updated_movie
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 401)
@@ -257,7 +284,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_delete_actor_404_fail(self):
         # bad endpoint, not found
-        res = self.client().delete('/actors/500', headers=self.executive_header)
+        res = self.client().delete(
+            '/actors/500', headers=self.executive_header
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)
@@ -283,7 +312,9 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
     def test_delete_movie_404_fail(self):
         # bad endpoint, not found
-        res = self.client().delete('/movies/500', headers=self.executive_header)
+        res = self.client().delete(
+            '/movies/500', headers=self.executive_header
+            )
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 404)

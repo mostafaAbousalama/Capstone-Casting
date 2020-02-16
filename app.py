@@ -6,6 +6,7 @@ import dateutil.parser
 from models import setup_db, Movie, Actor
 from auth import AuthError, requires_auth
 
+
 def date_valid(date_str):
     try:
         validate_date_string = dateutil.parser.parse(date_str)
@@ -52,7 +53,9 @@ def create_app(test_config=None):
             if (new_gender.upper() != 'M') and (new_gender.upper() != 'F'):
                 return abort(422)
             # Format and create the actor object.
-            actor = Actor(name=new_name, age=new_age, gender=new_gender.upper())
+            actor = Actor(
+                name=new_name, age=new_age, gender=new_gender.upper()
+                )
             actor.insert()
             return jsonify({
                 'success': True,
@@ -60,7 +63,6 @@ def create_app(test_config=None):
                 })
         except AuthError:
             abort(422)
-
 
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
     @requires_auth('patch:actors')
@@ -90,7 +92,6 @@ def create_app(test_config=None):
         except AuthError:
             abort(422)
 
-
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
     @requires_auth('delete:actors')
     def delete_actor(payload, actor_id):
@@ -104,7 +105,6 @@ def create_app(test_config=None):
         except AuthError:
             abort(422)
 
-
     @app.route('/movies')
     @requires_auth('get:movies')
     def get_all_movies(payload):
@@ -117,7 +117,6 @@ def create_app(test_config=None):
             'success': True,
             'movies': movies
         })
-
 
     @app.route('/movies', methods=['POST'])
     @requires_auth('post:movies')
@@ -145,7 +144,6 @@ def create_app(test_config=None):
         except AuthError:
             abort(422)
 
-
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('patch:movies')
     def modify_movie(payload, movie_id):
@@ -172,7 +170,6 @@ def create_app(test_config=None):
         except AuthError:
             abort(422)
 
-
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movies')
     def delete_movie(payload, movie_id):
@@ -186,7 +183,6 @@ def create_app(test_config=None):
             return jsonify({"success": True, "delete": movie_id})
         except AuthError:
             abort(422)
-
 
     # Error handling
 
@@ -229,7 +225,6 @@ def create_app(test_config=None):
             "error": error.error,
             "message": error.status_code
         }), error.error
-
 
     return app
 
