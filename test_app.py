@@ -54,6 +54,12 @@ class CapstoneCastingTestCase(unittest.TestCase):
             "gender": "M"
         }
 
+        self.new_actor2 = {
+            "name": "Ian McKellen",
+            "age": 8,
+            "gender": "M"
+        }
+
         # This is a sample movie to be used during the test
         # of the insertion endpoint.
         self.new_movie = {
@@ -69,11 +75,22 @@ class CapstoneCastingTestCase(unittest.TestCase):
             "gender": "M"
         }
 
+        self.updated_actor2 = {
+            "name": "Patrick Stewart",
+            "age": 79,
+            "gender": "M"
+        }
+
         # This is a sample movie to be used during the test
         # of the patch endpoint.
         self.updated_movie = {
             "title": "12 Angry Men",
             "release_date": "March 25, 1957"
+        }
+
+        self.updated_movie2 = {
+            "title": "The Shawshank Redemption",
+            "release_date": "September 10, 1994"
         }
 
         # Binds the app to the current context.
@@ -86,9 +103,27 @@ class CapstoneCastingTestCase(unittest.TestCase):
         # Executed after reach test.
         pass
 
-    def test_get_actors(self):
+    def test_get_actors_by_executive_producer(self):
         # Test for successful retrieval of all actors.
         res = self.client().get('/actors', headers=self.executive_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['actors']))
+
+    def test_get_actors_by_casting_director(self):
+        # Test for successful retrieval of all actors.
+        res = self.client().get('/actors', headers=self.director_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['actors']))
+
+    def test_get_actors_by_casting_assistant(self):
+        # Test for successful retrieval of all actors.
+        res = self.client().get('/actors', headers=self.assistant_header)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -113,9 +148,27 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unauthorized')
 
-    def test_get_movies(self):
+    def test_get_movies_by_executive_producer(self):
         # Test for successful retrieval of all movies.
         res = self.client().get('/movies', headers=self.executive_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['movies']))
+
+    def test_get_movies_by_casting_director(self):
+        # Test for successful retrieval of all movies.
+        res = self.client().get('/movies', headers=self.director_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['movies']))
+
+    def test_get_movies_by_casting_assistant(self):
+        # Test for successful retrieval of all movies.
+        res = self.client().get('/movies', headers=self.assistant_header)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -140,10 +193,21 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unauthorized')
 
-    def test_post_new_actor(self):
+    def test_post_new_actor_by_executive_producer(self):
         # Test for the successful creation of a new actor.
         res = self.client().post(
             '/actors', headers=self.executive_header, json=self.new_actor
+            )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['actor']))
+
+    def test_post_new_actor_by_casting_director(self):
+        # Test for the successful creation of a new actor.
+        res = self.client().post(
+            '/actors', headers=self.director_header, json=self.new_actor2
             )
         data = json.loads(res.data)
 
@@ -162,6 +226,17 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
 
+    def test_post_new_actor_by_casting_assistant_401_fail(self):
+        # unauthorized, permission not granted
+        res = self.client().post(
+            '/actors', headers=self.assistant_header, json=self.new_actor
+            )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unauthorized')
+
     def test_post_new_actor_401_fail(self):
         # unauthorized, permission not granted
         res = self.client().post(
@@ -173,7 +248,7 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unauthorized')
 
-    def test_post_new_movie(self):
+    def test_post_new_movie_by_executive_producer(self):
         # Test for the successful creation of a new movie.
         res = self.client().post(
             '/movies', headers=self.executive_header, json=self.new_movie
@@ -195,6 +270,28 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unprocessable')
 
+    def test_post_new_movie_by_casting_director_401_fail(self):
+        # unauthorized, permission not granted
+        res = self.client().post(
+            '/movies', headers=self.director_header, json=self.new_movie
+            )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unauthorized')
+
+    def test_post_new_movie_by_casting_assistant_401_fail(self):
+        # unauthorized, permission not granted
+        res = self.client().post(
+            '/movies', headers=self.assistant_header, json=self.new_movie
+            )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unauthorized')
+
     def test_post_new_movie_401_fail(self):
         # unauthorized, permission not granted
         res = self.client().post(
@@ -206,10 +303,21 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unauthorized')
 
-    def test_patch_actor(self):
+    def test_patch_actor_by_executive_producer(self):
         # Test for the successful update of an existing actor.
         res = self.client().patch(
-            '/actors/3', headers=self.executive_header, json=self.updated_actor
+            '/actors/2', headers=self.executive_header, json=self.updated_actor
+            )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['actor']))
+
+    def test_patch_actor_by_casting_director(self):
+        # Test for the successful update of an existing actor.
+        res = self.client().patch(
+            '/actors/3', headers=self.director_header, json=self.updated_actor2
             )
         data = json.loads(res.data)
 
@@ -229,6 +337,17 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'resource not found')
 
+    def test_patch_actor_by_casting_assistant_401_fail(self):
+        # unauthorized, permission not granted
+        res = self.client().patch(
+            '/actors/3', headers=self.assistant_header, json=self.updated_actor
+            )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unauthorized')
+
     def test_patch_actor_401_fail(self):
         # unauthorized, permission not granted
         res = self.client().patch(
@@ -240,10 +359,21 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unauthorized')
 
-    def test_patch_movie(self):
+    def test_patch_movie_by_executive_producer(self):
         # Test for the successful update of an existing movie.
         res = self.client().patch(
-            '/movies/3', headers=self.executive_header, json=self.updated_movie
+            '/movies/2', headers=self.executive_header, json=self.updated_movie
+            )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(len(data['movie']))
+
+    def test_patch_movie_by_casting_director(self):
+        # Test for the successful update of an existing movie.
+        res = self.client().patch(
+            '/movies/3', headers=self.director_header, json=self.updated_movie2
             )
         data = json.loads(res.data)
 
@@ -263,6 +393,17 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'resource not found')
 
+    def test_patch_movie_by_casting_assistant_401_fail(self):
+        # unauthorized, permission not granted
+        res = self.client().patch(
+            '/movies/2', headers=self.assistant_header, json=self.updated_movie
+            )
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unauthorized')
+
     def test_patch_movie_401_fail(self):
         # unauthorized, permission not granted
         res = self.client().patch(
@@ -274,9 +415,17 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unauthorized')
 
-    def test_delete_actor(self):
+    def test_delete_actor_by_executive_producer(self):
         # Test for the successful deletion of an actor.
-        res = self.client().delete('/actors/5', headers=self.executive_header)
+        res = self.client().delete('/actors/4', headers=self.executive_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+
+    def test_delete_actor_by_casting_director(self):
+        # Test for the successful deletion of an actor.
+        res = self.client().delete('/actors/5', headers=self.director_header)
         data = json.loads(res.data)
 
         self.assertEqual(res.status_code, 200)
@@ -293,6 +442,15 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'resource not found')
 
+    def test_delete_actor_by_casting_assistant_401_fail(self):
+        # unauthorized, permission not granted
+        res = self.client().delete('/actors/5', headers=self.assistant_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unauthorized')
+
     def test_delete_actor_401_fail(self):
         # unauthorized, permission not granted
         res = self.client().delete('/actors/5', headers=self.bad_header)
@@ -302,7 +460,7 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'unauthorized')
 
-    def test_delete_movie(self):
+    def test_delete_movie_by_executive_producer(self):
         # Test for the successful deletion of a movie.
         res = self.client().delete('/movies/5', headers=self.executive_header)
         data = json.loads(res.data)
@@ -320,6 +478,24 @@ class CapstoneCastingTestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'resource not found')
+
+    def test_delete_movie_by_casting_director_401_fail(self):
+        # unauthorized, permission not granted
+        res = self.client().delete('/movies/5', headers=self.director_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unauthorized')
+
+    def test_delete_movie_by_casting_assistant_401_fail(self):
+        # unauthorized, permission not granted
+        res = self.client().delete('/movies/5', headers=self.assistant_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'unauthorized')
 
     def test_delete_movie_401_fail(self):
         # unauthorized, permission not granted
