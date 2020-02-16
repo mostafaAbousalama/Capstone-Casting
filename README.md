@@ -79,6 +79,7 @@ As mentioned above, you must have a valid token with the appropriate permissions
 To use the live version of the app, you may request a login token [here](https://dev-fm94z3bf.eu.auth0.com/authorize?audience=capstoneCastingAPI&response_type=token&client_id=CMycesvryw8Qxg3HXK3MLFBoMu7dzBlC&redirect_uri=http://127.0.0.1:8080/login-results).
 
 To sign in:
+```
     email: castingAssistant@capstone.com
     password: @Ssistantpassword
 
@@ -87,7 +88,7 @@ To sign in:
 
     email: executiveProducer@capstone.com
     password: Pr0ducerpassword
-
+```
 To sign out:
     (https://dev-fm94z3bf.eu.auth0.com/v2/logout?client_id=CMycesvryw8Qxg3HXK3MLFBoMu7dzBlC&returnTo=http://127.0.0.1:8080/logout)
 

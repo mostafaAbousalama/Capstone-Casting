@@ -56,7 +56,7 @@ class CapstoneCastingTestCase(unittest.TestCase):
 
         self.new_actor2 = {
             "name": "Ian McKellen",
-            "age": 8,
+            "age": 80,
             "gender": "M"
         }
 
