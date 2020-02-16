@@ -49,12 +49,15 @@ def create_app(test_config=None):
             if (new_name is None) or (new_age is None) or (new_gender is None):
                 return abort(422)
             # Validate that the gender is the proper format, if not, abort.
-            if (new_gender.upper() != 'M') or (new_gender.upper() != 'F'):
+            if (new_gender.upper() != 'M') and (new_gender.upper() != 'F'):
                 return abort(422)
             # Format and create the actor object.
             actor = Actor(name=new_name, age=new_age, gender=new_gender.upper())
             actor.insert()
-            return jsonify({'success': True, "actor": actor.format()})
+            return jsonify({
+                'success': True,
+                "actor": actor.format()
+                })
         except AuthError:
             abort(422)
 
@@ -75,11 +78,11 @@ def create_app(test_config=None):
 
             # Update the actor with the new values.
             if new_name is not None:
-                actor.name = req_name
+                actor.name = new_name
             if new_age is not None:
                 actor.age = new_age
             if new_gender is not None:
-                if (new_gender.upper() != 'M') or (new_gender.upper() != 'F'):
+                if (new_gender.upper() != 'M') and (new_gender.upper() != 'F'):
                     return abort(422)
                 actor.gender = new_gender.upper()
             actor.update()
@@ -133,14 +136,12 @@ def create_app(test_config=None):
             # Format and create the movie object.
             movie = Movie(title=new_title, release_date=new_release_date)
 
-            # Abort if the movie is already present in the database.
-            selection = Movie.query.all()
-            for movie in selection:
-                if movie.title == new_title:
-                    abort(422)
             # Otherwise, create a row in the database for the movie.
             movie.insert()
-            return jsonify({'success': True, "movie": movie.format()})
+            return jsonify({
+                'success': True,
+                "movie": movie.format()
+                })
         except AuthError:
             abort(422)
 

@@ -27,7 +27,7 @@ class Actor(db.Model):
     age = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String, nullable=False)
 
-    def __init__(self, name, catchphrase=""):
+    def __init__(self, name, age, gender):
         self.name = name
         self.age = age
         self.gender = gender
@@ -53,13 +53,13 @@ class Actor(db.Model):
 
 
 class Movie(db.Model):
-    __tablename__ = 'Movies'
+    __tablename__ = 'Movie'
 
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     release_date = db.Column(db.Date, nullable=False)
 
-    def __init__(self, name, catchphrase=""):
+    def __init__(self, title, release_date):
         self.title = title
         self.release_date = release_date
 
