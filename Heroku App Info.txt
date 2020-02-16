@@ -1,0 +1,4 @@
+https://secret-reaches-23636.herokuapp.com/ | https://git.heroku.com/secret-reaches-23636.git
+
+DATABASE_URl
+postgres://vifqbxypbcfcbr:2b7ea18cc54c171c02d6534ea13a717737c8a186a6956a0bbafa7ff8f9d47471@ec2-34-192-30-15.compute-1.amazonaws.com:5432/d90kbr2bv74tei

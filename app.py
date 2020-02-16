@@ -53,6 +53,10 @@ def create_app(test_config=None):
             if (new_gender.upper() != 'M') and (new_gender.upper() != 'F'):
                 return abort(422)
             # Format and create the actor object.
+            actors_selection = Actor.query.all()
+            for actor in actors_selection:
+                if (actor.name.upper() == new_name.upper()):
+                    abort(422)
             actor = Actor(
                 name=new_name, age=new_age, gender=new_gender.upper()
                 )
@@ -133,8 +137,11 @@ def create_app(test_config=None):
             if not date_valid(new_release_date):
                 return abort(422)
             # Format and create the movie object.
+            movies_selection = Movie.query.all()
+            for movie in movies_selection:
+                if (movie.title.upper() == new_title.upper()):
+                    abort(422)
             movie = Movie(title=new_title, release_date=new_release_date)
-
             # Otherwise, create a row in the database for the movie.
             movie.insert()
             return jsonify({
